@@ -32,4 +32,6 @@ merge(
   window.STORE
 )
 
+console.log('hi chris')
+
 export default A17Init
