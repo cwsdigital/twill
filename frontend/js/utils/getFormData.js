@@ -28,15 +28,12 @@ export const isBlockField = (name, id) => {
 
 export const isNestedField = (name) => {
   const regex = RegExp(/[A-Za-z0-9_-]*\[[A-Za-z0-9_-]*\]$/)
-  console.log(name)
-  console.log('isnested:' + regex.test(name))
   return regex.test(name)
 }
 
 export const getNestedKey = (name) => {
   const regex = RegExp(/([A-Za-z0-9-_]*)\[([A-Za-z0-9-_]*)\]$/)
   const matches = regex.exec(name)
-  console.log(matches)
   if (matches !== null) {
     return matches[1]
   }
@@ -45,7 +42,6 @@ export const getNestedKey = (name) => {
 export const getNestedAttributeName = (name) => {
   const regex = RegExp(/([A-Za-z0-9-_]*)\[([A-Za-z0-9-_]*)\]$/)
   const matches = regex.exec(name)
-  console.log(matches)
   if (matches !== null) {
     return matches[2]
   }
@@ -125,11 +121,8 @@ export const getFormFields = (rootState) => {
     // and we create a new object with field names as keys,
     // to inline fields in the submitted data
     if (isNestedField(field.name)) {
-      console.log('nested field')
       const nestedKey = getNestedKey(field.name)
-      console.log(nestedKey)
       const nestedAttribute = getNestedAttributeName(field.name)
-      console.log(nestedAttribute)
       if (fields[nestedKey] === undefined) {
         fields[nestedKey] = {}
       }
@@ -137,7 +130,6 @@ export const getFormFields = (rootState) => {
     } else {
       fields[field.name] = field.value
     }
-    console.log(fields)
     return fields
   }, {})
 
@@ -181,6 +173,7 @@ export const getFormData = (rootState) => {
     }),
     repeaters: gatherRepeaters(rootState)
   })
+  console.log(data)
 
   return data
 }

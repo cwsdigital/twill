@@ -278,7 +278,6 @@ const actions = {
     // - selected medias and browsers
     // - created blocks and repeaters
     const data = getFormData(rootState)
-    console.log(data)
 
     api.put(state.saveUrl, data, function (successResponse) {
       commit(FORM.UPDATE_FORM_LOADING, false)
