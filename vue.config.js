@@ -67,7 +67,7 @@ const svgConfig = (suffix = null) => {
   }
 }
 
-let plugins = [
+const plugins = [
   new CleanWebpackPlugin(),
   new SVGSpritemapPlugin(`${srcDirectory}/icons/**/*.svg`, svgConfig()),
   new SVGSpritemapPlugin(`${srcDirectory}/icons-files/**/*.svg`, svgConfig('files')),
@@ -102,17 +102,20 @@ const config = {
     loaderOptions: {
       // define global settings imported in all components
       sass: {
-        prependData: `@import "~styles/setup/_settings.scss";`
+        prependData: '@import "~styles/setup/_settings.scss";'
       }
     }
   },
   // Define entries points
   pages,
   devServer: {
-    hot: true,
+    //hot: true,
+    watchOptions: {
+      poll: true
+    },
     disableHostCheck: true,
     headers: {
-      "Access-Control-Allow-Origin": "*"
+      'Access-Control-Allow-Origin': '*'
     }
   },
   runtimeCompiler: true,
@@ -120,9 +123,9 @@ const config = {
     resolve: {
       alias: {
         'prosemirror-tables': path.join(__dirname, 'node_modules/prosemirror-tables/src/index.js'),
-        'prosemirror-state' : path.join(__dirname, 'node_modules/prosemirror-state/src/index.js'),
-        'prosemirror-view' : path.join(__dirname, 'node_modules/prosemirror-view/src/index.js'),
-        'prosemirror-transform' : path.join(__dirname, 'node_modules/prosemirror-transform/src/index.js')
+        'prosemirror-state': path.join(__dirname, 'node_modules/prosemirror-state/src/index.js'),
+        'prosemirror-view': path.join(__dirname, 'node_modules/prosemirror-view/src/index.js'),
+        'prosemirror-transform': path.join(__dirname, 'node_modules/prosemirror-transform/src/index.js')
       }
     },
     plugins,

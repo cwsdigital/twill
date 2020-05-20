@@ -26,6 +26,31 @@ export const isBlockField = (name, id) => {
   return name.startsWith('blocks[' + id + ']')
 }
 
+export const isNestedField = (name) => {
+  const regex = RegExp(/[A-Za-z0-9_-]*\[[A-Za-z0-9_-]*\]$/)
+  console.log(name)
+  console.log('isnested:' + regex.test(name))
+  return regex.test(name)
+}
+
+export const getNestedKey = (name) => {
+  const regex = RegExp(/([A-Za-z0-9-_]*)\[([A-Za-z0-9-_]*)\]$/)
+  const matches = regex.exec(name)
+  console.log(matches)
+  if (matches !== null) {
+    return matches[1]
+  }
+}
+
+export const getNestedAttributeName = (name) => {
+  const regex = RegExp(/([A-Za-z0-9-_]*)\[([A-Za-z0-9-_]*)\]$/)
+  const matches = regex.exec(name)
+  console.log(matches)
+  if (matches !== null) {
+    return matches[2]
+  }
+}
+
 export const stripOutBlockNamespace = (name, id) => {
   const nameWithoutBlock = name.replace('blocks[' + id + '][', '')
   return nameWithoutBlock.match(/]/gi).length > 1 ? nameWithoutBlock.replace(']', '') : nameWithoutBlock.slice(0, -1)
@@ -92,13 +117,27 @@ export const gatherRepeaters = (rootState) => {
 }
 
 export const getFormFields = (rootState) => {
+  console.log('gettingFormFeilds')
   const fields = rootState.form.fields.filter((field) => {
     // we start by filtering out blocks related form fields
     return !field.name.startsWith('blocks[') && !field.name.startsWith('mediaMeta[')
   }).reduce((fields, field) => {
     // and we create a new object with field names as keys,
     // to inline fields in the submitted data
-    fields[field.name] = field.value
+    if (isNestedField(field.name)) {
+      console.log('nested field')
+      const nestedKey = getNestedKey(field.name)
+      console.log(nestedKey)
+      const nestedAttribute = getNestedAttributeName(field.name)
+      console.log(nestedAttribute)
+      if (fields[nestedKey] === undefined) {
+        fields[nestedKey] = {}
+      }
+      fields[nestedKey][nestedAttribute] = field.value
+    } else {
+      fields[field.name] = field.value
+    }
+    console.log(fields)
     return fields
   }, {})
 
